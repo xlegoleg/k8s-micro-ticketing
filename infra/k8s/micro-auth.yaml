@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: micro-auth-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: micro-auth
+  template:
+    metadata:
+      labels:
+        app: micro-auth
+    spec:
+      containers:
+        - name: micro-auth
+          image: us.gcr.io/ticketing-dev-407521/micro-auth
+          env:
+            - name: JWT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: envconfigmap
+                  key: JWT_SECRET
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: micro-auth-srv
+spec:
+  selector:
+    app: micro-auth
+  ports: 
+    - name: micro-auth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
