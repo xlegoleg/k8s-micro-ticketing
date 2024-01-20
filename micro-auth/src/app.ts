@@ -2,14 +2,23 @@ import express from 'express';
 import 'express-async-errors';
 import { json } from  'body-parser';
 import cookieSession from 'cookie-session';
+import cors from 'cors';
+import { errorHandler, NotFoundError } from '@xlegoleg/ticketing-common';
 import { currentUserRouter } from './routes/current-user';
 import { signinRouter  } from './routes/signin';
 import { signoutRouter } from './routes/signout';
 import { signupRouter  } from './routes/signup';
-import { errorHandler } from './middlewares/error-handler';
-import { NotFoundError } from './errors/not-found-error';
+
+const DEV_ORIGINS = ['http://localhost:3000'];
 
 const app = express();
+/**
+ * Trust first proxy
+ */
+app.use(cors({
+  origin: process.env.NODE_ENV !== 'test' || DEV_ORIGINS,
+  credentials: true,
+}));
 /**
  * Trust first proxy
  */
@@ -19,7 +28,8 @@ app.set('trust proxy', true);
  */
 app.use(cookieSession({
   signed: false,
-  secure: process.env.NODE_ENV !== 'test',
+  secure: true,
+  sameSite: process.env.NODE_ENV !== 'test' ? 'strict' : 'none',
 }));
 app.use(json());
 
