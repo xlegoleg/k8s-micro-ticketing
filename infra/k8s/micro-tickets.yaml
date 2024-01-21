@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: micro-tickets-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: micro-tickets
+  template:
+    metadata:
+      labels:
+        app: micro-tickets
+    spec:
+      containers:
+        - name: micro-tickets
+          image: us.gcr.io/ticketing-dev-407521/micro-tickets
+          env:
+            - name: MICRO_TICKETS_MONGO_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: envconfigmap
+                  key: MICRO_TICKETS_MONGO_URL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: micro-tickets-srv
+spec:
+  selector:
+    app: micro-tickets
+  ports: 
+    - name: micro-tickets
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

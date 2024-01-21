@@ -17,6 +17,14 @@ build:
         manual:
           - dest: .
             src: 'src/**/*.ts'
+    - image: us.gcr.io/ticketing-dev-407521/micro-tickets
+      context: micro-tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: 'src/**/*.ts'
     - image: us.gcr.io/ticketing-dev-407521/client
       context: client
       docker:

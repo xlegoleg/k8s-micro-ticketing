@@ -1,19 +1,16 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-import request from 'supertest';
-import { app } from '../app';
-import { EPaths } from '../routes/constants/paths';
+import jwt from 'jsonwebtoken';
 
 let mongo: any;
 
 declare global {
-  var getAuthCookie: () => Promise<string[]>
+  var getAuthCookie: () => string[];
 }
 
 beforeAll(async () => {
   process.env.JWT_SECRET = 'asdf';
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
   mongo = await MongoMemoryServer.create();
   const mongoUri = mongo.getUri();
 
@@ -35,17 +32,29 @@ afterAll(async () => {
   await mongoose.connection.close();
 });
 
-global.getAuthCookie = async () => {
-  const email = 'test@test.com';
-  const password = 'test1234';
+global.getAuthCookie = () => {
+  /**
+   * Payload
+   */
+  const payload = {
+    id: new mongoose.Types.ObjectId().toHexString(),
+    email: 'test@test.com',
+  };
 
-  const response = await request(app)
-    .post(EPaths.SIGNUP)
-    .send({ 
-      email: 'test@test.com',
-      password: 'test1234',
-    })
-    .expect(201);
+  /**
+   * Creating JWT
+   */
+  const token = jwt.sign(payload, process.env.JWT_SECRET!);
 
-  return response.get('Set-Cookie');
+  /**
+   * Session cookie mock
+   */
+  const session = { jwt: token }
+
+  /**
+   * Mocking exact base64 value for session cookie
+   */
+  const base64 = Buffer.from(JSON.stringify(session)).toString('base64');
+
+  return [`session=${base64}`];
 }

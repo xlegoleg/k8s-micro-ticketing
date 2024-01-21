@@ -21,6 +21,11 @@ spec:
                 configMapKeyRef:
                   name: envconfigmap
                   key: JWT_SECRET
+            - name: MICRO_AUTH_MONGO_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: envconfigmap
+                  key: MICRO_AUTH_MONGO_URL
 ---
 apiVersion: v1
 kind: Service
