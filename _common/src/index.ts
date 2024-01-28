@@ -5,3 +5,4 @@
 
 export * from './errors/public-api';
 export * from './middlewares/public-api';
+export * from './nats-streaming/public-api';
