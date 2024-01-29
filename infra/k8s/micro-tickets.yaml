@@ -16,11 +16,21 @@ spec:
         - name: micro-tickets
           image: us.gcr.io/ticketing-dev-407521/micro-tickets
           env:
+            - name: JWT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: envconfigmap
+                  key: JWT_SECRET
             - name: MICRO_TICKETS_MONGO_URL
               valueFrom:
                 configMapKeyRef:
                   name: envconfigmap
                   key: MICRO_TICKETS_MONGO_URL
+            - name: NATS_STREAMING_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: envconfigmap
+                  key: NATS_STREAMING_URL
 ---
 apiVersion: v1
 kind: Service

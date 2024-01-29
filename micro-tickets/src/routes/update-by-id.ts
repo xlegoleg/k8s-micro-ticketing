@@ -3,6 +3,8 @@ import { param, body } from 'express-validator';
 import { NotFoundError, UnauthorizedError, requireAuth, validateRequest } from '@xlegoleg/ticketing-common';
 import { EPaths } from './constants/paths';
 import { TicketModel } from '../models/ticket';
+import { TicketUpdatedPublisher } from '../nats/ticket-updated-publisher';
+import { nats } from '../nats';
 
 const router = express.Router();
 
@@ -33,6 +35,12 @@ router.put(
       price
     });
     await ticket.save();
+    await new TicketUpdatedPublisher(nats.client).publish({
+      id: ticket.id,
+      userId: ticket.userId,
+      title: ticket.title,
+      price: ticket.price,
+    });
 
     res.status(200).send(ticket);
 });

@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express';
-import { param } from 'express-validator';
-import { NotFoundError, requireAuth, validateRequest } from '@xlegoleg/ticketing-common';
+import { requireAuth } from '@xlegoleg/ticketing-common';
 import { EPaths } from './constants/paths';
 import { TicketModel } from '../models/ticket';
 
