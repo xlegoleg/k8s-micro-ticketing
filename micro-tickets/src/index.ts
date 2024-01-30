@@ -6,7 +6,12 @@ import { connectNatsClient } from './nats';
  * App start function, put there all needed
  */
 const start = async () => {
-  const envs: string[] = ['MICRO_TICKETS_MONGO_URL'];
+  const envs: string[] = [
+    'MICRO_TICKETS_MONGO_URL',
+    'NATS_STREAMING_CLUSTER_ID',
+    'NATS_STREAMING_CLIENT_ID',
+    'NATS_STREAMING_URL'
+  ];
 
   envs.forEach((v) => {
     if (!process.env[v]) {
@@ -16,8 +21,8 @@ const start = async () => {
 
   try {
     await connectNatsClient({
-      clusterId: 'ticketing',
-      clientId: 'micro-tickets',
+      clusterId: process.env.NATS_STREAMING_CLUSTER_ID!,
+      clientId: process.env.NATS_STREAMING_CLIENT_ID!,
       url: process.env.NATS_STREAMING_URL!,
     });
     await mongoose.connect(process.env.MICRO_TICKETS_MONGO_URL!);

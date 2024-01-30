@@ -8,6 +8,18 @@ declare global {
   var getAuthCookie: () => string[];
 }
 
+jest.mock('../nats', () => ({
+  nats: {
+    client: {
+      publish: jest.fn().mockImplementation(
+        (subject: any, data: any, callback: any) => {
+          callback();
+        }
+      )
+    }
+  },
+}));
+
 beforeAll(async () => {
   process.env.JWT_SECRET = 'asdf';
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
@@ -30,6 +42,8 @@ afterAll(async () => {
     await mongo.stop();
   }
   await mongoose.connection.close();
+
+  jest.clearAllMocks();
 });
 
 global.getAuthCookie = () => {

@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
 import { EPaths } from '../constants/paths';
-import mongoose from 'mongoose';
+import { nats } from '../../nats';
 
 describe('tests getting all the tickets', () => {
   it(`has a route handler listenning to ${EPaths.TICKETS}`, async () => {
@@ -32,4 +32,4 @@ describe('tests getting all the tickets', () => {
     expect(response.body[0].title).toEqual('test');
     expect(response.body[0].price).toEqual(0.333);
   });
-})
+});

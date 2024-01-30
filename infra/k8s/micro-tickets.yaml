@@ -31,6 +31,15 @@ spec:
                 configMapKeyRef:
                   name: envconfigmap
                   key: NATS_STREAMING_URL
+            - name: NATS_STREAMING_CLUSTER_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: envconfigmap
+                  key: NATS_STREAMING_CLUSTER_ID
+            - name: NATS_STREAMING_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
 ---
 apiVersion: v1
 kind: Service
