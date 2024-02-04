@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: micro-orders-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: micro-orders
+  template:
+    metadata:
+      labels:
+        app: micro-orders
+    spec:
+      containers:
+        - name: micro-orders
+          image: us.gcr.io/ticketing-dev-407521/micro-orders
+          env:
+            - name: JWT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: envconfigmap
+                  key: JWT_SECRET
+            - name: MICRO_ORDERS_MONGO_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: envconfigmap
+                  key: MICRO_ORDERS_MONGO_URL
+            - name: NATS_STREAMING_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: envconfigmap
+                  key: NATS_STREAMING_URL
+            - name: NATS_STREAMING_CLUSTER_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: envconfigmap
+                  key: NATS_STREAMING_CLUSTER_ID
+            - name: NATS_STREAMING_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: micro-orders-srv
+spec:
+  selector:
+    app: micro-orders
+  ports: 
+    - name: micro-orders
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

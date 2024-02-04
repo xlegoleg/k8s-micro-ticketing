@@ -8,7 +8,7 @@ import { connectNatsClient } from './nats';
 const start = async () => {
   const envs: string[] = [
     'JWT_SECRET',
-    'MICRO_TICKETS_MONGO_URL',
+    'MICRO_ORDERS_MONGO_URL',
     'NATS_STREAMING_CLUSTER_ID',
     'NATS_STREAMING_CLIENT_ID',
     'NATS_STREAMING_URL'
@@ -26,7 +26,7 @@ const start = async () => {
       clientId: process.env.NATS_STREAMING_CLIENT_ID!,
       url: process.env.NATS_STREAMING_URL!,
     });
-    await mongoose.connect(process.env.MICRO_TICKETS_MONGO_URL!);
+    await mongoose.connect(process.env.MICRO_ORDERS_MONGO_URL!);
     console.log('Successfuly conneced to db');
   } catch (err) {
     console.error('Error connecting mongodb', err);
