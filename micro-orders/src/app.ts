@@ -4,6 +4,10 @@ import { json } from  'body-parser';
 import cookieSession from 'cookie-session';
 import cors from 'cors';
 import { currentUser, errorHandler, NotFoundError } from '@xlegoleg/ticketing-common';
+import { getAllRouter } from './routes/get-all';
+import { newOrderRouter } from './routes/new';
+import { getByIdRouter } from './routes/get-by-id';
+import { updateByIdRouter } from './routes/update-by-id';
 
 const DEV_ORIGINS = ['http://localhost:3000'];
 
@@ -33,6 +37,10 @@ app.use(json());
 /**
  * Routes section
  */
+app.use(getAllRouter);
+app.use(getByIdRouter);
+app.use(newOrderRouter);
+app.use(updateByIdRouter);
 app.all('*', async () => { throw new NotFoundError() });
 
 /**

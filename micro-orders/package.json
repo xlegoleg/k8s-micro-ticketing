@@ -33,7 +33,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@xlegoleg/ticketing-common": "^1.0.7",
+    "@xlegoleg/ticketing-common": "^1.0.10",
     "cookie-session": "^2.0.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
